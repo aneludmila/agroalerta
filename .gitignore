@@ -1,0 +1,17 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+*backup*.json
+coverage/
+*.log
+.DS_Store
+.openai/
+.agents/
+dist/agroalerta-codigo.zip

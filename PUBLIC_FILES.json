@@ -1,0 +1,17 @@
+[
+  ".gitignore",
+  ".github/workflows/tests.yml",
+  "README.md",
+  "LICENSE",
+  "package.json",
+  "package-lock.json",
+  "PUBLIC_FILES.json",
+  "scripts/audit.mjs",
+  "docs/VALIDACAO.md",
+  "dist/index.html",
+  "dist/style.css",
+  "dist/app.mjs",
+  "dist/engine.mjs",
+  "tests/engine.test.mjs",
+  "tests/ui.test.mjs"
+]
