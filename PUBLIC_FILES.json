@@ -13,5 +13,6 @@
   "dist/app.mjs",
   "dist/engine.mjs",
   "tests/engine.test.mjs",
-  "tests/ui.test.mjs"
+  "tests/ui.test.mjs",
+  "netlify.toml"
 ]
