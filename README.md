@@ -1,64 +1,206 @@
-# AgroAlerta
+# 🌱 AgroAlerta
 
-Protótipo funcional para o AGROHACK 2026/2: gestão inteligente de insumos rurais com alertas explicáveis.
+**Gestão inteligente de insumos rurais: do registro de estoque à decisão.**
 
-## Equipe
-Preencher antes da entrega: nome da equipe, integrantes, cursos, funções e responsável de ADS. Não publicar matrículas, contatos privados ou credenciais.
+O AgroAlerta é um protótipo web desenvolvido para o **AGROHACK 2026/2**, do IFRO Campus Ariquemes. A aplicação transforma registros de entradas e saídas em alertas explicáveis, estimativas de cobertura e prioridades para apoiar o responsável pelo estoque de uma propriedade rural.
 
-## Executar
-Sem dependências de interface e sem build. Na pasta do projeto:
+## 🔗 Acesse o projeto
 
-```sh
+- **Aplicação:** [agroaleta.netlify.app](https://agroaleta.netlify.app/)
+- **Vídeo de demonstração:** [Assistir no YouTube](https://youtu.be/ICoTeqFdzWU)
+- **Código-fonte:** [aneludmila/agroalerta](https://github.com/aneludmila/agroalerta)
+
+## O problema
+
+Uma propriedade rural movimenta fertilizantes, corretivos, sementes, defensivos, produtos biológicos, combustíveis, lubrificantes, peças, materiais de irrigação e equipamentos de proteção.
+
+Conhecer o saldo de cada produto não é suficiente para perceber riscos de falta, vencimento, excesso, consumo incomum ou valor financeiro concentrado em itens parados.
+
+O desafio é transformar esses registros em informações que permitam **identificar problemas, antecipar necessidades e apoiar decisões de forma simples e eficiente**.
+
+## A solução
+
+O AgroAlerta apresenta uma lista de situações que merecem atenção. Cada alerta informa:
+
+1. **O problema identificado.**
+2. **Os dados e o critério que justificam o alerta.**
+3. **Uma ação que o responsável pode considerar.**
+
+Por exemplo: com 80 litros de diesel e consumo médio de 10 litros por dia, a cobertura estimada é de 8 dias. Ao registrar uma entrada de 100 litros, o saldo passa para 180 litros e a cobertura para 18 dias, mantendo o mesmo consumo médio.
+
+Esse exemplo pertence à base simulada de demonstração.
+
+## ✨ Funcionalidades
+
+| Área | Recursos |
+| --- | --- |
+| Visão geral | Indicadores de estoque, produtos prioritários, risco de vencimento e valor conhecido armazenado |
+| Central de alertas | Busca, filtro por prioridade, justificativas e ações sugeridas |
+| Estoque | Cadastro de produtos, categorias, unidades, estoque mínimo e consulta de saldos |
+| Lotes | Controle de quantidade, custo unitário e validade por lote |
+| Movimentações | Registro de entradas, saídas, destino/origem e responsável |
+| Histórico | Consulta de movimentações e gráfico de consumo por produto |
+| Importação | Leitura de CSV, validação dos registros e identificação de duplicidades |
+| Exportação | Movimentações em CSV e backup completo em JSON |
+| Restauração | Validação e recuperação de backup JSON |
+| Critérios | Ajuste de parâmetros e reanálise automática dos dados |
+
+A aplicação bloqueia retiradas de lotes vencidos e movimentações que deixariam o saldo negativo em algum momento do histórico.
+
+## 📊 Análises e alertas
+
+Os critérios são propostas do projeto, não regras obrigatórias do edital.
+
+| Situação | Critério utilizado |
+| --- | --- |
+| Estoque baixo | Saldo utilizável menor ou igual ao estoque mínimo cadastrado |
+| Risco de falta | Cobertura estimada dentro da janela de urgência configurada |
+| Vencimento | Validade do lote e projeção de consumo em ordem de vencimento |
+| Retirada incomum | Quantidade superior a 3 vezes a mediana de pelo menos 5 retiradas anteriores nos 90 dias precedentes |
+| Consumo crescente | Aumento superior a 50% entre duas janelas completas de consumo |
+| Possível excesso | Cobertura superior à referência configurada |
+| Produto parado | Ausência de retirada por pelo menos 60 dias |
+| Variação de preço | Aumento superior a 20% entre os dois últimos lotes adquiridos com preço conhecido |
+
+### Estimativa de cobertura
+
+```text
+Consumo médio diário = quantidade retirada na janela ÷ dias corridos da janela
+Cobertura estimada = saldo utilizável ÷ consumo médio diário
+```
+
+A janela padrão é de **30 dias**, incluindo dias sem retirada. A estimativa exige uma janela histórica completa, considerando a data do primeiro registro, e pelo menos **3 saídas recentes**.
+
+Quando não há consumo recente ou histórico suficiente, o sistema informa que a cobertura está indisponível. A primeira movimentação não comprova que o histórico está completo; essa condição deve ser confirmada com a origem dos dados.
+
+### Prioridades
+
+- **Atenção imediata:** falta de estoque utilizável, lote vencido, risco próximo de falta ou vencimento e inconsistência de saldo.
+- **Acompanhar:** estoque abaixo do mínimo, risco de vencimento, consumo crescente e retirada incomum.
+- **Revisar:** possível excesso, produtos parados e aumento de preço.
+
+Um produto pode ter vários alertas. As explicações ficam disponíveis na interface para que o usuário compreenda a classificação.
+
+## 🛠️ Tecnologias
+
+| Tecnologia | Uso |
+| --- | --- |
+| HTML5 e CSS3 | Estrutura e apresentação da interface |
+| JavaScript com módulos ES | Navegação, formulários, importação e motor de análise |
+| localStorage | Persistência dos registros no navegador |
+| Node.js e node:test | Verificação de sintaxe e testes automatizados |
+| jsdom | Testes das interações da interface em DOM simulado |
+| GitHub Actions | Execução automática dos testes e auditoria dos arquivos públicos |
+| Netlify | Hospedagem estática |
+
+O protótipo não depende de banco de dados remoto ou APIs externas para analisar os registros.
+
+## ▶️ Executar localmente
+
+### Pré-requisitos
+
+- Git para clonar o repositório.
+- Python 3 para servir a aplicação localmente.
+- Node.js 22 ou superior e npm para executar os testes.
+
+```bash
+git clone https://github.com/aneludmila/agroalerta.git
+cd agroalerta
 python3 -m http.server 8080 --directory dist
 ```
 
-Abrir http://localhost:8080. Servir por HTTP; módulos JavaScript não devem ser abertos por file://.
+Abra **http://localhost:8080** no navegador.
 
-## Funcionalidades
-Visão geral; alertas com prioridade e justificativa; estoque e detalhes por lote; gráfico de consumo; cadastro de produto; entradas, saídas e novos lotes; importação CSV validada e atômica; exportação CSV; backup JSON; restauração validada; parâmetros ajustáveis; reanálise automática.
+Sirva os arquivos por HTTP. Abrir `index.html` diretamente com `file://` pode impedir o carregamento dos módulos JavaScript.
 
-## Dados
-A aplicação começa com dados SIMULADOS, gerados em relação à data atual de Rondônia. A base oficial não foi disponibilizada no desenvolvimento. Para usá-la, exportar backup, iniciar base vazia e adaptar o arquivo para o modelo da tela Importar dados. Uma linha por movimentação; incluir entradas iniciais; preço unitário e validade pertencem ao lote; IDs estáveis evitam duplicidade. Sem ID, linhas iguais são deduplicadas por conteúdo, o que exige IDs distintos em retiradas legítimas idênticas. Campos: id, produto, categoria, unidade, minimo, lote, tipo, data, quantidade, preco, validade, destino, responsavel. Dados de diferentes origens geram indicação de base mista.
+## 📁 Importar dados
 
-Importação normaliza acentos, caixa e espaços para comparar nome, categoria e unidade; não converte unidades ou une nomes semelhantes. Histórico negativo e datas inválidas bloqueiam toda a importação. Preço/validade ausentes são null. Preços conflitantes no mesmo lote são bloqueados. Movimentações futuras não são aceitas.
+A aplicação inicia com uma base **simulada**, identificada na interface. Esses dados não substituem a demonstração com a base oficial do desafio.
 
-## Regras e limites
-Ver a tela Critérios de análise e dist/engine.mjs. Saldo físico por lote = entradas − saídas. Estoque utilizável exclui lotes vencidos. Consumo diário = saídas da janela / dias corridos; exige janela histórica completa pela primeira movimentação e pelo menos 3 saídas recentes. A primeira data não prova completude do histórico: confirmar com a origem. Cobertura desconhecida se falta histórico ou consumo é zero. FEFO aloca consumo projetado por ordem de vencimento sem dupla contagem. Retirada incomum: >3× mediana de no mínimo 5 saídas anteriores em 90 dias. Crescimento: >50% entre duas janelas completas. Possível excesso: cobertura acima de referência configurável. Item parado: 60 dias sem retirada. Variação de preço: >20% entre últimos lotes. Valores ausentes deixam o total parcial. Alertas não são recomendações agronômicas nem prova de desvio.
+Para trabalhar somente com outra base:
 
-## Testes
-Node.js 22 ou superior:
+1. Exporte um backup dos registros atuais.
+2. Acesse **Importar dados** e escolha **Iniciar base vazia**.
+3. Baixe o modelo CSV e adapte os registros ao formato.
+4. Selecione a origem correta e importe o arquivo.
+5. Confira os saldos, os tratamentos e os alertas gerados.
 
-```sh
+### Formato do CSV
+
+Uma linha por movimentação, com cabeçalho:
+
+```csv
+id;produto;categoria;unidade;minimo;lote;tipo;data;quantidade;preco;validade;destino;responsavel
+```
+
+- Datas no formato `AAAA-MM-DD`.
+- Tipo `entrada` ou `saida`.
+- Incluir a entrada inicial de cada lote para permitir o cálculo do saldo.
+- `preco` representa o custo **unitário** do lote; vazio significa desconhecido.
+- `validade` pode ficar vazia quando não informada.
+- Manter preço e validade consistentes nas linhas do mesmo lote.
+- Utilizar códigos de lote distintos para aquisições com preços diferentes.
+- Preferir IDs estáveis para cada movimentação.
+
+Sem ID, movimentações com conteúdo idêntico são consideradas duplicadas. Duas retiradas legítimas idênticas precisam de IDs diferentes.
+
+A importação é validada antes de salvar. Datas inválidas, quantidades negativas, IDs conflitantes e saldos históricos negativos bloqueiam a operação. Unidades diferentes permanecem separadas, sem conversão automática.
+
+## 🧪 Testes e validação
+
+```bash
 npm ci --ignore-scripts
 npm run check
 npm test
 npm run audit:source
 ```
 
-12 cenários do motor e 13 cenários de interação DOM passaram (26 testes contabilizados pelo executor, incluindo o teste agrupador). Navegação, filtros, formulários, cadastro, entradas e saídas, novos lotes, downloads, CSV, duplicidade, backup, restauração, troca de base e critérios foram exercitados. Detalhes em docs/VALIDACAO.md. Os testes DOM usam jsdom com adaptadores para diálogos e downloads; não verificam renderização visual ou downloads reais de navegador. Revisão visual em navegador real e validação de campo permanecem pendentes.
+Na validação registrada em **13/10/2026**, passaram:
 
-## Código público e segredos
-A aplicação não requer .env, senha, chave de API ou token. Os arquivos públicos estão explicitamente listados em PUBLIC_FILES.json. Configurações privadas de hospedagem, .git, node_modules, backups e credenciais não entram no pacote público. .gitignore protege contra inclusão acidental de arquivos comuns de segredo. A auditoria busca padrões de tokens e chaves privadas nos arquivos selecionados; não garante detecção de todo segredo possível. Ao adicionar serviços externos, manter segredos exclusivamente no servidor. Nunca colocar segredo no JavaScript entregue ao navegador.
+- **12 cenários do motor de análise.**
+- **13 cenários de interação da interface.**
+- **26 testes contabilizados pelo executor**, incluindo o teste agrupador da interface.
 
-## Roteiro de demonstração e validação
-1. Identificar a origem simulada.
-2. Conferir diesel: 80 L, consumo médio 10 L/dia, cobertura 8 dias.
-3. Registrar entrada de 100 L no lote; verificar 180 L e cobertura de 18 dias.
-4. Tentar saída maior que o saldo; verificar bloqueio sem alteração.
-5. Conferir sementes vencidas e retirada incomum de ureia.
-6. Exportar backup, abrir base vazia e importar CSV oficial adaptado quando disponível.
-7. Reimportar o mesmo arquivo; verificar duplicadas ignoradas.
-8. Ajustar critérios e mostrar reanálise.
-9. Validar com responsável por estoque/estudante de Agronomia: pedir a primeira prioridade, a explicação e a decisão. Registrar feedback real e alterações. Não há validação de campo realizada ainda.
+Os cenários abrangem cobertura, vencimento, reanálise, bloqueio de saldos negativos, histórico insuficiente, anomalias, importação CSV, duplicidade, unidades, navegação, filtros, formulários, downloads, backup e restauração.
 
-## Persistência
-Dados em localStorage do navegador, sem servidor de dados ou sincronização entre dispositivos. Exportar backup para conservação. O Site começa privado ao proprietário. Para avaliação, equipe deverá preparar acesso aprovado ou executar localmente. A solução funciona sem APIs externas; hospedagem e autenticação do Site exigem rede.
+Os testes de interface utilizam **DOM simulado** com adaptações para diálogos e downloads. Eles não comprovam renderização visual, responsividade ou funcionamento nativo dos downloads em todos os navegadores.
 
-## Autoria e IA
-Desenvolvido com apoio de ChatGPT/Codex na interface, motor de regras, documentação e testes. Os integrantes devem revisar e compreender o código, validar resultados, registrar suas contribuições e declarar o uso de IA na entrega. Sem bibliotecas externas de interface, sem imagens de terceiros.
+Consulte as evidências e limitações em [docs/VALIDACAO.md](docs/VALIDACAO.md). A validação formal com usuários de campo e a demonstração com a base oficial não estão documentadas como concluídas.
 
-## Entrega acadêmica pendente
-Preencher equipe, obter/adaptar base oficial, registrar validação real, gravar vídeo, preparar apresentação, enviar repositório GitHub acessível no portal e identificar versão por tag/commit. Prazo oficial de repositório: a divulgar pela organização. O protótipo não foi submetido à organização.
+## 🚀 Publicação no Netlify
 
-## Licença
-MIT; ver LICENSE.
+O arquivo [netlify.toml](netlify.toml) configura:
+
+- **Diretório de publicação:** `dist`.
+- **Comando de verificação:** `npm run check && npm run audit:source`.
+- **Versão do Node.js:** 22.
+
+## 🔒 Persistência e segurança
+
+Os dados ficam no **localStorage do navegador**, sem sincronização entre dispositivos. Limpar os dados do navegador pode remover os registros; exporte backups para preservá-los.
+
+A versão atual não exige `.env`, senha, token ou chave de API. O [`.gitignore`](.gitignore) exclui arquivos comuns de segredo, backups e estados locais de hospedagem. A seleção dos arquivos públicos está em [PUBLIC_FILES.json](PUBLIC_FILES.json).
+
+A auditoria automatizada procura padrões comuns de segredo e complementa a revisão humana. Caso sejam adicionados serviços externos, as credenciais devem permanecer no servidor e nunca no JavaScript entregue ao navegador.
+
+## Limitações do protótipo
+
+- As previsões pressupõem continuidade do consumo recente e podem variar conforme safra, calendário de atividades ou mudanças operacionais.
+- Ausência de validade não significa ausência de risco; ausência de preço deixa o valor financeiro parcial.
+- Retiradas incomuns são sinais para conferência, não provas de erro ou desvio.
+- Possível excesso não significa que um item é desnecessário: reservas de manutenção e compras sazonais precisam ser avaliadas.
+- Os alertas apoiam a gestão do estoque e não substituem orientação agronômica.
+
+## 👥 Equipe
+
+Projeto vinculado ao **AGROHACK 2026/2 — IFRO Campus Ariquemes**.
+
+A composição da equipe, os cursos e as funções dos integrantes devem ser registrados antes da entrega acadêmica. O repositório não publica matrículas, contatos privados ou credenciais.
+
+## 🤖 Uso de inteligência artificial
+
+ChatGPT/Codex foi utilizado como apoio ao desenvolvimento da interface, motor de análise, documentação e testes. Os integrantes devem compreender o código, revisar os resultados, validar os critérios e registrar suas contribuições e as partes apoiadas por IA.
+
+## 📄 Licença
+
+Distribuído sob a licença **MIT**. Consulte [LICENSE](LICENSE).
