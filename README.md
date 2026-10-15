@@ -195,7 +195,14 @@ A auditoria automatizada procura padrões comuns de segredo e complementa a revi
 
 Projeto vinculado ao **AGROHACK 2026/2 — IFRO Campus Ariquemes**.
 
-A composição da equipe, os cursos e as funções dos integrantes devem ser registrados antes da entrega acadêmica. O repositório não publica matrículas, contatos privados ou credenciais.
+| Integrante | Função sugerida |
+| --- | --- |
+| Ane | Desenvolvimento da interface, integração das funcionalidades e organização do projeto |
+| Julia | Análise dos dados e definição dos critérios de alerta |
+| Luan | Testes funcionais, validação dos fluxos e registro das evidências |
+| Kevin | Documentação, vídeo de demonstração e apresentação da solução |
+
+Esta é uma divisão proposta de responsabilidades; deve ser ajustada pela equipe conforme as contribuições efetivamente realizadas. O repositório não publica matrículas, contatos privados ou credenciais.
 
 ## 🤖 Uso de inteligência artificial
 
